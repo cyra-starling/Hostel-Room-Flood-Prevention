@@ -1,12 +1,33 @@
 #:kivy 1.10.1
 
-<MainScreen>:        
-    BoxLayout:
-        orientation: "vertical"
-        padding: 0,0,0,0
-        spacing: 0
+<MainScreen>:  
+    FloatLayout:
         #Create "background" image
         Image:
             source: "bg1.jpg"
+            size_hint: 1, 1
+            allow_stretch: True
+            keep_ratio: True
+            pos: (0,0) 
+
+        ImageButton:
+            source: "refresh.png"
+            text: ""
+            size_hint: 0.1, 0.1
+            pos_hint: {"right":0.98, "top":0.98}
+            on_press: root.refresh()
+
+        #To show the weather
         Image:
-            source: "bg1.jpg"
+            source: "Sunny.png"
+            size_hint: 0.5, 0.5
+            keep_ratio: True
+            pos: (150,300)
+        
+        
+        
+
+<Button>:
+    font_size: 40
+    color: 0,1,0,0
+    size_hint: 0.2, 0.2
