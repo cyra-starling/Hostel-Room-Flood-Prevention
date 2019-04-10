@@ -1,6 +1,10 @@
 #:kivy 1.10.1
 
 <MainScreen>:
+    weatherpic : weatherpic
+    weather : weather
+    temperature : temperature
+    
     FloatLayout:
         #Create "background" image
         Image:
@@ -19,6 +23,7 @@
 
         #To show the weather
         Image:
+            id : weatherpic
             source: "Sunny.png"
             size_hint: 0.3, 0.3
             keep_ratio: True
@@ -27,6 +32,7 @@
         
         #Text to show the weather (sunny/cloudy/rain/thunderstorm)
         Label:
+            id: weather
             text: "Sunny"
             font_size: 40
             size: self.texture_size
@@ -34,6 +40,7 @@
 
         #Text to show temperature
         Label:
+            id : temperature
             text: '33\u00B0C'
             font_size: 40
             pos_hint: {"center_x":0.5, "center_y":0.67}
