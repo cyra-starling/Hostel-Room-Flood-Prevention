@@ -4,9 +4,10 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import ButtonBehavior  
 from kivy.uix.image import Image
 from kivy.core.window import Window
+from kivy.uix.label import Label
 
 #Set the window size
-Window.size = (600, 600)
+Window.size = (360, 640)
 
 
 class MainScreen(FloatLayout):
@@ -24,8 +25,6 @@ class MainScreen(FloatLayout):
         #After this is all the ifs to change the text and image in kivy but idk how yet
         #Keywords: Sunny.png, Rain.png, Thunderstorm.png, Cloudy.png
         #The source that needs to be changed is the image to show the weather (I put a comment)
-        
-
 
 class ImageButton(ButtonBehavior, Image):
     #Just so that the button can be image lmao  

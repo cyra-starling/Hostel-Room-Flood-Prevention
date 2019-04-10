@@ -1,31 +1,77 @@
 #:kivy 1.10.1
 
-<MainScreen>:  
+<MainScreen>:
     FloatLayout:
         #Create "background" image
         Image:
-            source: "bg1.jpg"
+            source: "bg.jpg"
             size_hint: 1, 1
             allow_stretch: True
-            keep_ratio: True
+            keep_ratio: False
             pos: (0,0) 
 
         ImageButton:
             source: "refresh.png"
             text: ""
             size_hint: 0.1, 0.1
-            pos_hint: {"right":0.98, "top":0.98}
+            pos_hint: {"right":0.97, "top":1}
             on_press: root.refresh()
 
         #To show the weather
         Image:
             source: "Sunny.png"
-            size_hint: 0.5, 0.5
+            size_hint: 0.3, 0.3
             keep_ratio: True
-            pos: (150,300)
+            allow_stretch: False
+            pos_hint: {"center_x":0.5, "center_y":0.85}
         
+        #Text to show the weather (sunny/cloudy/rain/thunderstorm)
+        Label:
+            text: "Sunny"
+            font_size: 40
+            size: self.texture_size
+            pos_hint: {"center_x":0.5, "center_y":0.73}
+
+        #Text to show temperature
+        Label:
+            text: '33\u00B0C'
+            font_size: 40
+            pos_hint: {"center_x":0.5, "center_y":0.67}
+
+        Label:
+            text: "__________________________________"
+            font_size: 20
+            pos_hint: {"center_x":0.5, "center_y":0.63}
+            size: self.width, 5
         
-        
+        #Show window image
+        Image:
+            source: "window.png"
+            size_hint: 0.3, 0.3
+            keep_ratio: True
+            allow_stretch: False
+            pos_hint: {"center_x":0.25, "center_y":0.5}
+
+        #Text of window condition (open/close)
+        Label:
+            text: "Window:"
+            font_size: 35
+            size: self.texture_size
+            pos_hint: {"center_x":0.7, "center_y":0.53}
+
+        Label:
+            text: "Closed"
+            font_size: 30
+            size: self.texture_size
+            pos_hint: {"center_x":0.7, "center_y":0.48}
+
+        #Line
+        Label:
+            text: "__________________________________"
+            font_size: 20
+            pos_hint: {"center_x":0.5, "center_y":0.4}
+            size: self.width, 5
+
 
 <Button>:
     font_size: 40
