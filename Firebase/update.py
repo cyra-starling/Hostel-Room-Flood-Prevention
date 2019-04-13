@@ -5,58 +5,51 @@ import requests
 import datetime
 
 cred = credentials.Certificate("../keys/dw-project.json")
+# Not Included
 firebase_admin.initialize_app(cred, {'databaseURL': 'https://dw-project-d22fe.firebaseio.com/'})
 
 ref = db.reference()
 
-users_ref = ref.child('test')
+users_ref = ref.child()
+
 '''
-a = dict({
-    "items":
-        {
-            "item":
-                [
-                    {
-                        "id": "0001",
-                        "type": "donut",
-                        "name": "Cake",
-                        "ppu": 0.55,
-                        "batters":
-                            {
-                                "batter":
-                                    [
-                                        {"id": "1001", "type": "Regular"},
-                                        {"id": "1002", "type": "Chocolate"},
-                                        {"id": "1003", "type": "Blueberry"},
-                                        {"id": "1004", "type": "Devil's Food"}
-                                    ]
-                            },
-                        "topping":
-                            [
-                                {"id": "5001", "type": "None"},
-                                {"id": "5002", "type": "Glazed"},
-                                {"id": "5005", "type": "Sugar"},
-                                {"id": "5007", "type": "Powdered Sugar"},
-                                {"id": "5006", "type": "Chocolate with Sprinkles"},
-                                {"id": "5003", "type": "Chocolate"},
-                                {"id": "5004", "type": "Maple"}
-                            ]
-                    }
-                ]
-        }
+Firebase Database Structure
 
-})
+dic = {
+    'users': {
+        'user':
+            [
+                {"id": 1, "window": "closed", "raining":"Yes"},
+                {"id": 2, "window": "closed", "raining":"No"}
+            ]
 
-users_ref.set(a)
 
+    },
+    "forecasts": {
+        "forecast":
+            [
+                {"region": "Changi", "weather": "Sunny", "temperature": {"low": 24, "high": 36}
+
+                 },
+                {"region": "Bedok", "weather": "Rainy", "temperature": {"low": 28, "high": 32}
+
+                 }
+
+            ]
+    }
+
+}
+
+users_ref.set(dic)
 print(users_ref.get())
 '''
+
 # - - - -
 
 
 class WeatherData:
     def __init__(self):
-        self._response = self.weather_get()
+        self._response = self.weatherapi_get()
 
     def get_weather(self):
         return self._response
@@ -70,21 +63,39 @@ class WeatherData:
 
         finalDate = f"{dateparam}T{time24hrs}"
 
-        url = 'https://api.data.gov.sg/v1/environment/2-hour-weather-forecast'
+        weatherurl = 'https://api.data.gov.sg/v1/environment/2-hour-weather-forecast'
         data = {'date_time': finalDate}
-        response = requests.get(url, params=data)
-        json = response.json()
+        weatherresponse = requests.get(weatherurl, params=data)
+        weatherjson = weatherresponse.json()
 
-        return json
+        temperatureurl = 'https://api.data.gov.sg/v1/environment/24-hour-weather-forecast'
 
-    def weather_get(self):
+        temperatureresponse = requests.get(temperatureurl,params=data)
+        temperaturejson = temperatureresponse.json()
+
+        return [weatherjson, temperaturejson]
+
+    def weatherapi_get(self):
         json = self.api_call()
+        response = []
 
-        for item in json['items'][0]['forecasts']:
+        for item in json[0]['items'][0]['forecasts']:
             if item['area'] == 'Changi':
-                return item['forecast']
+                response.append(item['forecast'])
+
+        a = json[1]['items'][0]['general']['temperature']
+
+        for item in a:
+            response.append(a[item])
+
+        return response
+
     weather = property(get_weather)
 
 
 currentWeather = WeatherData()
 print(currentWeather.weather)
+
+# Refresh function: currentWeather.weatherapi_get()
+# Returns a list of [ weatherstatus, mintemp, maxtemp ]
+# To set the text of respective labels in kivy, reference using id, with a new function
