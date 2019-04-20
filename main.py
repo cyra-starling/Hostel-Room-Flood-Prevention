@@ -6,6 +6,7 @@ from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.properties import ObjectProperty
+from kivy.clock import Clock
 #Set the window size
 Window.size = (360, 640)
 
@@ -20,8 +21,10 @@ class MainScreen(FloatLayout):
     weather = ObjectProperty(None)
     temperature = ObjectProperty(None)
     
+    is_it_raining = False
+
     #refresh is the update function
-    def refresh(self):
+    def refresh(self, dt):
         ##################################
         #             Update             #
         #            Function            #
@@ -51,13 +54,41 @@ class MainScreen(FloatLayout):
             self.weather.text = 'Rain'
             self.temperature.text = self.current_temperature
 
+    def button_enabler(self,dt):
+        if self.is_it_raining == True and self.window_condition == "Open":
+            self.ids['closebutton'].disabled = False
+            self.ids['closebutton'].background_color = 1,1,1,1
+            self.ids['closebutton'].color = 1,1,1,1
+            Clock.unschedule(self.button_enabler)
+            Clock.schedule_interval(self.button_disabler,1)
+    
+    def button_disabler(self,dt):
+        if self.is_it_raining == False or self.window_condition == "Closed":
+            self.ids['closebutton'].disabled = True
+            self.ids['closebutton'].background_color = 0,0,0,0
+            self.ids['closebutton'].color = 0,0,0,0
+            Clock.unschedule(self.button_disabler)
+            Clock.schedule_interval(self.button_enabler,1)
+
+    def close_window(self):
+        print("Thymio, close the window please!")
+        ##################################
+        #             Thymio             #
+        #             Command            #
+        #              Here              #
+        ##################################
+
+
 class ImageButton(ButtonBehavior, Image):
-    #Just so that the button can be image lmao  
+    #A custom widget which takes the behaviour of button and image = image button
     pass
 
 class MyApp(App):
     def build(self):
-        return MainScreen()
+        screen = MainScreen()
+        Clock.schedule_interval(screen.button_enabler,1)
+        Clock.schedule_interval(screen.refresh,120) #Refresh function is now called every 2 mins
+        return screen
     
 #Running the App
 if __name__ == '__main__':
