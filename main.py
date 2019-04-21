@@ -7,24 +7,46 @@ from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
+from libdw import pyrebase
 #Set the window size
 Window.size = (360, 640)
 
+#------------------------- Firebase Codes -------------------------------#
+url = 'https://dw-project-d22fe.firebaseio.com/'  # URL to Firebase database
+apikey = 'AIzaSyCwGVwAcf2XLeRtMd1sbgt3NlNxPVmIc0E'  # unique token used for authentication
+
+config = {
+    "apiKey": apikey,
+    "databaseURL": url,
+}
+
+# Create a firebase object by specifying the URL of the database and its secret token.
+# The firebase object has functions put and get, that allows user to put data onto 
+# the database and also retrieve data from the database.
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
+#------------------------- Firebase Codes -------------------------------#
 
 class MainScreen(FloatLayout):
     #List of data
     weather_condition = "Cloudy"
     current_temperature = "25\u00B0C | 33\u00B0C"
     window_condition = "Closed"
-    
-    weatherpic = ObjectProperty(None)
-    weather = ObjectProperty(None)
-    temperature = ObjectProperty(None)
-    
+     
     is_it_raining = False
-
-    #refresh is the update function
-    def refresh(self, dt):
+      
+    #refresh is the update function/get the current data of the weather
+    def refresh(self):
+        
+        #Weather Condition
+        self.weather_condition = db.child("forecasts").child("forecast").child("0").child("weather").get().val()
+        
+        #Temperature
+        max_temp = db.child("forecasts").child("forecast").child("0").child("temperature").child("high").get().val()
+        min_temp = db.child("forecasts").child("forecast").child("0").child("temperature").child("low").get().val()
+        
+        self.current_temperature = "{}\u00B0C | {}\u00B0C".format(max_temp,min_temp)
+        
         ##################################
         #             Update             #
         #            Function            #
@@ -35,24 +57,24 @@ class MainScreen(FloatLayout):
         #Keywords: Sunny.png, Rain.png, Thunderstorm.png, Cloudy.png
         #Updating Weather Conditions data
         if self.weather_condition == "Sunny":
-            self.weatherpic.source = 'Sunny.png'
-            self.weather.text ='Sunny'
-            self.temperature.text = self.current_temperature
+            self.ids['weatherpic'].source = 'Sunny.png'
+            self.ids['weather'].text ='Sunny'
+            self.ids['temperature'].text = self.current_temperature
             
         elif self.weather_condition == "Thunderstorm":
-            self.weatherpic.source = 'Thunderstorm.png'
-            self.weather.text = 'Thunderstorm'
-            self.temperature.text = self.current_temperature
+            self.ids['weatherpic'].source = 'Thunderstorm.png'
+            self.ids['weather'].text = 'Thunderstorm'
+            self.ids['temperature'].text = self.current_temperature
             
         elif self.weather_condition == "Cloudy":
-            self.weatherpic.source = 'Cloudy.png'
-            self.weather.text = 'Cloudy'
-            self.temperature.text = self.current_temperature
+            self.ids['weatherpic'].source = 'Cloudy.png'
+            self.ids['weather'].text = 'Cloudy'
+            self.ids['temperature'].text = self.current_temperature
             
         elif self.weather_condition == 'Rain':
-            self.weatherpic.source = 'Rain.png'
-            self.weather.text = 'Rain'
-            self.temperature.text = self.current_temperature
+            self.ids['weatherpic'].source = 'Rain.png'
+            self.ids['weather'].text = 'Rain'
+            self.ids['temperature'].text = self.current_temperature
 
     def button_enabler(self,dt):
         if self.is_it_raining == True and self.window_condition == "Open":
@@ -77,6 +99,8 @@ class MainScreen(FloatLayout):
         #             Command            #
         #              Here              #
         ##################################
+        
+#        Remember to add in the Python commands to disable the button once it has been closed
 
 
 class ImageButton(ButtonBehavior, Image):
