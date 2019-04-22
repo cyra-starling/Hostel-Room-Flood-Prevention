@@ -47,8 +47,15 @@ class MainScreen(FloatLayout):
         min_temp = db.child("forecasts").child("forecast").child("0").child("temperature").child("low").get().val()
 
         # Rain sensor
-        # not yet
+        rain = db.child('users').child('user').child('0').child('raining').get().val()
+        print(rain)
+        if rain == 'Yes':
+            self.is_it_raining = True
+        else:
+            self.is_it_raining = False
 
+        # Window condition
+        self.window_condition = db.child('users').child('user').child('0').child('window').get().val()
 
         #--------------------------------------Update--------------------------------------------------------------#
         self.current_temperature = "{}\u00B0C | {}\u00B0C".format(max_temp,min_temp)
@@ -82,6 +89,9 @@ class MainScreen(FloatLayout):
             self.ids['rainsensor'].text = "It's raining!"
         else:
             self.ids['rainsensor'].text = "No water detected"
+
+        # Update text on window condition
+        self.ids['windowcond'].text = self.window_condition
     '''
     def button_enabler(self,dt):
         if self.is_it_raining == True and self.window_condition == "Open":
@@ -101,16 +111,16 @@ class MainScreen(FloatLayout):
     '''
     def open_window(self):
         print("Thymio, open the window please!")
-        db.child('raining').set('No')
-        if db.child('raining').get().val() == 'No':
-            self.window_condition = "Open"
+        db.child('thymio').set('No')
+        if db.child('thymio').get().val() == 'No':
+            db.child('users').child('user').child('0').child('window').set("Open")
             self.refresh()
 
     def close_window(self):
         print("Thymio, close the window please!")
-        db.child('raining').set('Yes')
-        if db.child('raining').get().val() == 'Yes':
-            self.window_condition = "Closed"
+        db.child('thymio').set('Yes')
+        if db.child('thymio').get().val() == 'Yes':
+            db.child('users').child('user').child('0').child('window').set("Closed")
             self.refresh()
 
 
