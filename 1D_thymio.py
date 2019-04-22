@@ -20,7 +20,7 @@ config = {
 # the database and also retrieve data from the database.
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
-water_list = db.child("raining").get()
+water_list = db.child("thymio").get()
 
 robot = ThymioReal()  # create a robot object
 
