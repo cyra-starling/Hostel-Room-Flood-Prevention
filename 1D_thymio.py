@@ -45,6 +45,11 @@ for water_value in water_list:
         robot.wheels(100, 100)
         robot.sleep(1)    ###value inside sleep is based on actual set size###
 
+for water_value in water_list:
+    if water_value == "No":  ###
+        robot.wheels(-100, -100)
+        robot.sleep(1)
+
 # 'up' movement => robot.wheels(100, 100)
 # 'left' movement => robot.wheels(-100, 100)
 # 'right' movement => robot.wheels(100, -100)
