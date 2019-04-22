@@ -10,10 +10,11 @@ firebase_admin.initialize_app(cred, {'databaseURL': 'https://dw-project-d22fe.fi
 
 ref = db.reference()
 
-users_ref = ref.child()
+users_ref = ref.child('users/user/0')
+forecasts_ref = ref.child('forecasts/forecast/0')
 
 '''
-Firebase Database Structure
+#Firebase Database Structure
 
 dic = {
     'users': {
@@ -40,8 +41,8 @@ dic = {
 
 }
 
-users_ref.set(dic)
-print(users_ref.get())
+ref.set(dic)
+print(ref.get())
 '''
 
 # - - - -
@@ -49,10 +50,7 @@ print(users_ref.get())
 
 class WeatherData:
     def __init__(self):
-        self._response = self.weatherapi_get()
-
-    def get_weather(self):
-        return self._response
+        self.weatherapi_get()
 
     def api_call(self):
 
@@ -70,31 +68,33 @@ class WeatherData:
 
         temperatureurl = 'https://api.data.gov.sg/v1/environment/24-hour-weather-forecast'
 
-        temperatureresponse = requests.get(temperatureurl,params=data)
+        temperatureresponse = requests.get(temperatureurl, params=data)
         temperaturejson = temperatureresponse.json()
 
         return [weatherjson, temperaturejson]
 
     def weatherapi_get(self):
         json = self.api_call()
-        response = []
 
-        for item in json[0]['items'][0]['forecasts']:
+        weatherjson = json[0]
+        temperaturejson = json[1]
+
+        for item in weatherjson['items'][0]['forecasts']:
             if item['area'] == 'Changi':
-                response.append(item['forecast'])
+                weather = item['forecast']
 
-        a = json[1]['items'][0]['general']['temperature']
+        high = temperaturejson['items'][0]['general']['temperature']['high']
+        low = temperaturejson['items'][0]['general']['temperature']['low']
 
-        for item in a:
-            response.append(a[item])
+        forecasts_ref.update({"region":"Changi","weather":f"{weather}",
+                              "temperature": {"low": f"{low}", "high": f"{high}"}})
 
-        return response
+        
 
-    weather = property(get_weather)
 
 
 currentWeather = WeatherData()
-print(currentWeather.weather)
+currentWeather.weatherapi_get()
 
 # Refresh function: currentWeather.weatherapi_get()
 # Returns a list of [ weatherstatus, mintemp, maxtemp ]
