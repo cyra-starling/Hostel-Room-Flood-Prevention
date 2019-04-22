@@ -90,13 +90,20 @@
             pos_hint: {"center_x":0.5, "center_y":0.30}
 
         Button:
-            id: closebutton
-            disabled: True
-            color: 0,0,0,0
-            background_color: 0,0,0,0
-            text: "Close Window"
+            id: openbutton
+            text: "Open Window"
+            background_color: 0,0,0.8,0.7
             font_size: 30
-            pos_hint: {"center_x":0.5, "center_y":0.2}
+            pos_hint: {"center_x":0.5, "center_y":0.18}
+            size_hint: 0.7, 0.1
+            on_press: root.open_window()
+
+        Button:
+            id: closebutton
+            text: "Close Window"
+            background_color: 1,0,0,0.7
+            font_size: 30
+            pos_hint: {"center_x":0.5, "center_y":0.07}
             size_hint: 0.7, 0.1
             on_press: root.close_window()
 
