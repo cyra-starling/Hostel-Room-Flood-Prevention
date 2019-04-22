@@ -38,22 +38,29 @@ class MainScreen(FloatLayout):
       
     # Refresh is the update function/get the current data of the weather
     def refresh(self):
-        
+        #--------------------------------------Update--------------------------------------------------------------#
         # Weather Condition
         self.weather_condition = db.child("forecasts").child("forecast").child("0").child("weather").get().val()
         
         # Temperature
         max_temp = db.child("forecasts").child("forecast").child("0").child("temperature").child("high").get().val()
         min_temp = db.child("forecasts").child("forecast").child("0").child("temperature").child("low").get().val()
-        
+
+        # Rain sensor
+        rain = db.child('users').child('user').child('0').child('raining').get().val()
+        print(rain)
+        if rain == 'Yes':
+            self.is_it_raining = True
+        else:
+            self.is_it_raining = False
+
+        # Window condition
+        self.window_condition = db.child('users').child('user').child('0').child('window').get().val()
+
+        #--------------------------------------Update--------------------------------------------------------------#
         self.current_temperature = "{}\u00B0C | {}\u00B0C".format(max_temp,min_temp)
         
-        ##################################
-        #             Update             #
-        #            Function            #
-        #              Here              #
-        ##################################
-        print ("refresh button is pressed")
+        print ("refresh function is called")
         
         # Keywords: Sunny.png, Rain.png, Thunderstorm.png, Cloudy.png
         # Updating Weather Conditions data
@@ -83,31 +90,38 @@ class MainScreen(FloatLayout):
         else:
             self.ids['rainsensor'].text = "No water detected"
 
+        # Update text on window condition
+        self.ids['windowcond'].text = self.window_condition
+    '''
     def button_enabler(self,dt):
         if self.is_it_raining == True and self.window_condition == "Open":
             self.ids['closebutton'].disabled = False
-            self.ids['closebutton'].background_color = 1,1,1,1
-            self.ids['closebutton'].color = 1,1,1,1
+            #self.ids['closebutton'].background_color = 1,1,1,1
+            #self.ids['closebutton'].color = 1,1,1,1
             Clock.unschedule(self.button_enabler)
             Clock.schedule_interval(self.button_disabler,1)
     
     def button_disabler(self,dt):
         if self.is_it_raining == False or self.window_condition == "Closed":
             self.ids['closebutton'].disabled = True
-            self.ids['closebutton'].background_color = 0,0,0,0
-            self.ids['closebutton'].color = 0,0,0,0
+            #self.ids['closebutton'].background_color = 0,0,0,0
+            #self.ids['closebutton'].color = 0,0,0,0
             Clock.unschedule(self.button_disabler)
             Clock.schedule_interval(self.button_enabler,1)
+    '''
+    def open_window(self):
+        print("Thymio, open the window please!")
+        db.child('thymio').set('No')
+        if db.child('thymio').get().val() == 'No':
+            db.child('users').child('user').child('0').child('window').set("Open")
+            self.refresh()
 
     def close_window(self):
         print("Thymio, close the window please!")
-        ##################################
-        #             Thymio             #
-        #             Command            #
-        #              Here              #
-        ##################################      
-        # Remember to add in the Python commands to disable the button once it has been closed
-        # Will do after the Thymio command is done!
+        db.child('thymio').set('Yes')
+        if db.child('thymio').get().val() == 'Yes':
+            db.child('users').child('user').child('0').child('window').set("Closed")
+            self.refresh()
 
 
 class ImageButton(ButtonBehavior, Image):
@@ -117,7 +131,7 @@ class ImageButton(ButtonBehavior, Image):
 class MyApp(App):
     def build(self):
         screen = MainScreen()
-        Clock.schedule_interval(screen.button_enabler,1)
+        #Clock.schedule_interval(screen.button_enabler,1)
         Clock.schedule_interval(screen.refresh,120) # Refresh function is now called every 2 mins
         return screen
     
