@@ -76,6 +76,19 @@
             pos_hint: {"center_x":0.5, "center_y":0.4}
             size: self.width, 5
 
+        Label:
+            text: "Water Sensor:"
+            font_size: 30
+            size: self.texture_size
+            pos_hint: {"center_x":0.5, "center_y":0.35}
+
+        Label:
+            id: rainsensor
+            text: "No water detected"
+            font_size: 30
+            size: self.texture_size
+            pos_hint: {"center_x":0.5, "center_y":0.30}
+
         Button:
             id: closebutton
             disabled: True
