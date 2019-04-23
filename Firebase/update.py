@@ -52,7 +52,7 @@ class WeatherData:
     def __init__(self):
         self.weatherapi_get()
 
-    def api_call(self):
+    def api_call(self, **kwargs):
 
         string = str(datetime.datetime.now())
         datevalues = string.split()
@@ -73,7 +73,7 @@ class WeatherData:
 
         return [weatherjson, temperaturejson]
 
-    def weatherapi_get(self):
+    def weatherapi_get(self, **kwargs):
         json = self.api_call()
 
         weatherjson = json[0]
@@ -92,10 +92,10 @@ class WeatherData:
         
 
 
-
+'''
 currentWeather = WeatherData()
 currentWeather.weatherapi_get()
-
+'''
 # Refresh function: currentWeather.weatherapi_get()
 # Returns a list of [ weatherstatus, mintemp, maxtemp ]
 # To set the text of respective labels in kivy, reference using id, with a new function

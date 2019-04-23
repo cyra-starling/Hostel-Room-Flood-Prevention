@@ -51,7 +51,7 @@ class MainScreen(FloatLayout):
     is_it_raining = False
       
     # Refresh is the update function/get the current data of the weather
-    def refresh(self, **kwargs):
+    def refresh(self, *args):
         '''
         This function gets required data from the firebase and will update
         the text attribute from labels in the GUI to match current condition
@@ -59,25 +59,31 @@ class MainScreen(FloatLayout):
         '''
         
         #--------------------- Getting data from firebase --------------------#
-        fcast = db.child("forecasts").child("forecast").child("0")
-
+        
+        '''
+        fcast is the reference to the database in firebase, and it needs to be
+        re-assigned to the variable fcast for it to work (not sure why)
+        '''
         # Getting weather condition from firebase
+        fcast = db.child("forecasts").child("forecast").child("0")
         self.weather_condition = fcast.child("weather").get().val()
         
         # Getting temperature from firebase
+        fcast = db.child("forecasts").child("forecast").child("0")
         max_t = fcast.child("temperature").child("high").get().val()
+        
+        fcast = db.child("forecasts").child("forecast").child("0")
         min_t = fcast.child("temperature").child("low").get().val()
         print(max_t,min_t)
-        print(self.weather_condition)
+
         
         # Accessing user data from firebase
-        user = db.child('users').child('user').child('0')
-
         # Getting rain sensor data from firebase
+        user = db.child('users').child('user').child('0')
         rain = user.child('raining').get().val()
-        
 
         # Window condition
+        user = db.child('users').child('user').child('0')
         self.window_condition = user.child('window').get().val()
 
 
@@ -128,14 +134,14 @@ class MainScreen(FloatLayout):
         '''
         This function will tell thymio to open the window through firebase
         '''
-
-        user = db.child('users').child('user').child('0')
+        
         print("Thymio, open the window please!")
         
-        # Changed the firebase child thymio to 'No' to make it open the window
+        # Changed the firebase child thymio to 'No' to make its open the window
         db.child('thymio').set('No')
         
         # Update the firebase and tell that the window is open
+        user = db.child('users').child('user').child('0')
         user.child('window').set("Open")
         self.refresh()
 
@@ -144,13 +150,14 @@ class MainScreen(FloatLayout):
         This function will tell thymio to open the window through firebase
         '''
 
-        user = db.child('users').child('user').child('0')
+        
         print("Thymio, close the window please!")
 
         # Changed the firebase child thymio to 'Yes' to make it close the window
         db.child('thymio').set('Yes')
 
         # Update the firebase and tell that the window is closed
+        user = db.child('users').child('user').child('0')
         user.child('window').set("Closed")
         self.refresh()
 
