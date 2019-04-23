@@ -53,6 +53,9 @@ class MainScreen(FloatLayout):
         This function gets required data from the firebase and will update
         the text attribute from labels in the GUI to match current condition
         of window and weather.
+        As this function is called both when pressing the refresh button and
+        by clock schedule, both calls have different amount of arguments passed
+        to it, so we used **kwargs to take care of the arguments
         '''
         
         #--------------------- Getting data from firebase --------------------#
