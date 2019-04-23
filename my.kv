@@ -1,22 +1,24 @@
 #:kivy 1.10.1
+#:import utils kivy.utils
 
 <MainScreen>:
-
+        
     FloatLayout:
         #Create "background" image
         Image:
-            source: "bg.jpg"
+            source: "blackbg.png"
             size_hint: 1, 1
             allow_stretch: True
             keep_ratio: False
             pos: (0,0) 
-
+                
         ImageButton:
-            source: "refresh.png"
+            source: "refresh2.png"
             text: ""
             size_hint: 0.1, 0.1
-            pos_hint: {"right":0.97, "top":1}
+            pos_hint: {"right":0.95, "top":1}
             on_press: root.refresh()
+            color: utils.get_color_from_hex('#839496')
 
         #To show the weather
         Image:
@@ -31,6 +33,7 @@
         Label:
             id: weather
             text: "Sunny"
+            color: utils.get_color_from_hex('#FDF6E3')
             font_size: 40
             size: self.texture_size
             pos_hint: {"center_x":0.5, "center_y":0.73}
@@ -39,14 +42,17 @@
         Label:
             id : temperature
             text: '26\u00B0C | 33\u00B0C'
+            color: utils.get_color_from_hex('#FDF6E3')
             font_size: 40
             pos_hint: {"center_x":0.5, "center_y":0.67}
-
-        Label:
-            text: "__________________________________"
-            font_size: 20
-            pos_hint: {"center_x":0.5, "center_y":0.63}
-            size: self.width, 5
+        
+        Image:
+            source: "line.png"
+            size_hint: 0.8, 0.005
+            keep_ratio: False
+            allow_stretch: True
+            opacity: 0.7
+            pos_hint: {"center_x":0.5, "center_y":0.6}
         
         #Show window image
         Image:
@@ -54,33 +60,38 @@
             size_hint: 0.3, 0.3
             keep_ratio: True
             allow_stretch: False
-            pos_hint: {"center_x":0.25, "center_y":0.5}
+            pos_hint: {"center_x":0.29, "center_y":0.5}
 
         #Text of window condition (open/close)
         Label:
             text: "Window:"
             font_size: 35
             size: self.texture_size
-            pos_hint: {"center_x":0.7, "center_y":0.53}
+            pos_hint: {"center_x":0.67, "center_y":0.53}
+            color: utils.get_color_from_hex('#FDF6E3')
 
         Label:
             id: windowcond
             text: "Closed"
             font_size: 30
             size: self.texture_size
-            pos_hint: {"center_x":0.7, "center_y":0.48}
+            color: utils.get_color_from_hex('#FDF6E3')
+            pos_hint: {"center_x":0.67, "center_y":0.46}
 
         #Line
-        Label:
-            text: "__________________________________"
-            font_size: 20
+        Image:
+            source: "line.png"
+            size_hint: 0.8, 0.005
+            opacity: 0.7
+            keep_ratio: False
+            allow_stretch: True
             pos_hint: {"center_x":0.5, "center_y":0.4}
-            size: self.width, 5
 
         Label:
             text: "Water Sensor:"
             font_size: 30
             size: self.texture_size
+            color: utils.get_color_from_hex('#FDF6E3')
             pos_hint: {"center_x":0.5, "center_y":0.35}
 
         Label:
@@ -88,12 +99,13 @@
             text: "No water detected"
             font_size: 30
             size: self.texture_size
+            color: utils.get_color_from_hex('#FDF6E3')
             pos_hint: {"center_x":0.5, "center_y":0.30}
 
         Button:
             id: openbutton
             text: "Open Window"
-            background_color: 0,0,0.8,0.7
+            background_color: 0.14,0.545,0.768,1
             font_size: 30
             pos_hint: {"center_x":0.5, "center_y":0.18}
             size_hint: 0.7, 0.1
@@ -102,7 +114,7 @@
         Button:
             id: closebutton
             text: "Close Window"
-            background_color: 1,0,0,0.7
+            background_color: 1,0,0,1
             font_size: 30
             pos_hint: {"center_x":0.5, "center_y":0.07}
             size_hint: 0.7, 0.1

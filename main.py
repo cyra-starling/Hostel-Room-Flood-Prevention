@@ -1,3 +1,6 @@
+from kivy.config import Config
+Config.set('graphics', 'resizable', False)
+
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
@@ -7,6 +10,7 @@ from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
+from kivy.graphics import Rectangle
 from libdw import pyrebase
 from Firebase.update import WeatherData
 
