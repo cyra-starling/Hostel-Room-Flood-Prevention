@@ -8,6 +8,8 @@ from kivy.uix.label import Label
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 from libdw import pyrebase
+from Firebase.update import Weatherdata
+
 #Set the window size
 Window.size = (360, 640)
 

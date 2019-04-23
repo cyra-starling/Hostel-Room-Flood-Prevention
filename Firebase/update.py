@@ -10,7 +10,6 @@ firebase_admin.initialize_app(cred, {'databaseURL': 'https://dw-project-d22fe.fi
 
 ref = db.reference()
 
-users_ref = ref.child()
 
 '''
 Firebase Database Structure
