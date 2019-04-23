@@ -8,6 +8,9 @@ from kivy.uix.label import Label
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 from libdw import pyrebase
+from Firebase.update import WeatherData
+
+#Set the window size
 
 # Set the window size for Kivy
 Window.size = (360, 640)
@@ -67,7 +70,9 @@ class MainScreen(FloatLayout):
         # Getting temperature from firebase
         max_t = fcast.child("temperature").child("high").get().val()
         min_t = fcast.child("temperature").child("low").get().val()
-
+        print(max_t,min_t)
+        print(self.weather_condition)
+        
         # Accessing user data from firebase
         user = db.child('users').child('user').child('0')
 
@@ -85,26 +90,32 @@ class MainScreen(FloatLayout):
         self.current_temperature = "{}\u00B0C | {}\u00B0C".format(max_t,min_t)
 
         # Updating Weather Conditions data
-        # File names: Sunny.png, Rain.png, Thunderstorm.png, Cloudy.png
-        if self.weather_condition == "Sunny":
+        
+        #Sunny Weather
+        if "Partly Cloudy"  in self.weather_condition:
             self.ids['weatherpic'].source = 'Sunny.png'
             self.ids['weather'].text ='Sunny'
             self.ids['temperature'].text = self.current_temperature
             
-        elif self.weather_condition == "Thunderstorm":
+        #Thundery Weather    
+        elif "Thunder" in self.weather_condition:
             self.ids['weatherpic'].source = 'Thunderstorm.png'
             self.ids['weather'].text = 'Thunderstorm'
             self.ids['temperature'].text = self.current_temperature
             
-        elif self.weather_condition == "Cloudy":
+        #Cloudy Weather    
+        elif "Cloudy" in self.weather_condition:
             self.ids['weatherpic'].source = 'Cloudy.png'
             self.ids['weather'].text = 'Cloudy'
             self.ids['temperature'].text = self.current_temperature
-            
-        elif self.weather_condition == 'Rain':
+        
+        #Rainy Weather
+        elif "Rain" in self.weather_condition or "Showers" in self.weather_condition:
             self.ids['weatherpic'].source = 'Rain.png'
             self.ids['weather'].text = 'Rain'
             self.ids['temperature'].text = self.current_temperature
+            
+        
         
         # Updating label for data from rain sensor (raining or not)
         if rain == "Yes":
@@ -156,8 +167,10 @@ class MyApp(App):
     def build(self):
         # This function creates an object of MainScreen class and returns it
         screen = MainScreen()
+        currentWeather = WeatherData()
         # Refresh function is now called every 2 mins
-        Clock.schedule_interval(screen.refresh,120) 
+        Clock.schedule_interval(screen.refresh,120)
+        Clock.schedule_interval(currentWeather.weatherapi_get,120)
         return screen
 
 
