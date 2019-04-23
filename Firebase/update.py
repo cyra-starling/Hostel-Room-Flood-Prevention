@@ -4,7 +4,7 @@ from firebase_admin import db
 import requests
 import datetime
 
-cred = credentials.Certificate("../keys/dw-project.json")
+cred = credentials.Certificate("keys/dw-project.json")
 # Not Included
 firebase_admin.initialize_app(cred, {'databaseURL': 'https://dw-project-d22fe.firebaseio.com/'})
 
