@@ -1,6 +1,3 @@
-from kivy.config import Config
-Config.set('graphics', 'resizable', False)
-
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
@@ -13,8 +10,6 @@ from kivy.clock import Clock
 from kivy.graphics import Rectangle
 from libdw import pyrebase
 from Firebase.update import WeatherData
-
-#Set the window size
 
 # Set the window size for Kivy
 Window.size = (360, 640)
@@ -100,27 +95,28 @@ class MainScreen(FloatLayout):
         self.current_temperature = "{}\u00B0C | {}\u00B0C".format(max_t,min_t)
 
         # Updating Weather Conditions data
-        
+        weather = self.weather_condition
+
         #Sunny Weather
-        if "Partly Cloudy"  in self.weather_condition:
+        if "Partly Cloudy"  in weather:
             self.ids['weatherpic'].source = 'Sunny.png'
             self.ids['weather'].text ='Sunny'
             self.ids['temperature'].text = self.current_temperature
             
         #Thundery Weather    
-        elif "Thunder" in self.weather_condition:
+        elif "Thunder" in weather:
             self.ids['weatherpic'].source = 'Thunderstorm.png'
             self.ids['weather'].text = 'Thunderstorm'
             self.ids['temperature'].text = self.current_temperature
             
         #Cloudy Weather    
-        elif "Cloudy" in self.weather_condition:
+        elif "Cloudy" in weather:
             self.ids['weatherpic'].source = 'Cloudy.png'
             self.ids['weather'].text = 'Cloudy'
             self.ids['temperature'].text = self.current_temperature
         
         #Rainy Weather
-        elif "Rain" in self.weather_condition or "Showers" in self.weather_condition:
+        elif "Rain" in weather or "Showers" in weather:
             self.ids['weatherpic'].source = 'Rain.png'
             self.ids['weather'].text = 'Rain'
             self.ids['temperature'].text = self.current_temperature
@@ -160,7 +156,7 @@ class MainScreen(FloatLayout):
         
         print("Thymio, close the window please!")
 
-        # Changed the firebase child thymio to 'Yes' to make it close the window
+        # Changed the data in firebase to 'Yes' to make it close the window
         db.child('thymio').set('Yes')
 
         # Update the firebase and tell that the window is closed
