@@ -3,4 +3,4 @@ Kivy
 Kivy-Garden
 pyrebase
 requests
-python-telegram-bot
+libdw

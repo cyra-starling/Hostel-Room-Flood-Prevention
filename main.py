@@ -9,7 +9,7 @@ from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 from kivy.graphics import Rectangle
 from libdw import pyrebase
-from Firebase.update import WeatherData
+from update import WeatherData
 
 # Set the window size for Kivy
 Window.size = (360, 640)
@@ -138,10 +138,8 @@ class MainScreen(FloatLayout):
         This function will tell thymio to open the window through firebase
         '''
         
-        print("Thymio, open the window please!")
-        
         # Changed the firebase child thymio to 'No' to make its open the window
-        db.child('thymio').set('No')
+        db.child('users').child('user').child('0').child('thymio').set('No')
         
         # Update the firebase and tell that the window is open
         user = db.child('users').child('user').child('0')
@@ -153,11 +151,8 @@ class MainScreen(FloatLayout):
         This function will tell thymio to open the window through firebase
         '''
 
-        
-        print("Thymio, close the window please!")
-
         # Changed the data in firebase to 'Yes' to make it close the window
-        db.child('thymio').set('Yes')
+        db.child('users').child('user').child('0').child('thymio').set('Yes')
 
         # Update the firebase and tell that the window is closed
         user = db.child('users').child('user').child('0')
@@ -175,9 +170,11 @@ class MyApp(App):
         # This function creates an object of MainScreen class and returns it
         screen = MainScreen()
         currentWeather = WeatherData()
+
         # Refresh function is now called every 2 mins
         Clock.schedule_interval(screen.refresh,120)
         Clock.schedule_interval(currentWeather.weatherapi_get,120)
+
         return screen
 
 
