@@ -3,9 +3,9 @@ from time import sleep
 from libdw import pyrebase
 
 # URL to Firebase database
-url = 'https://dw-project-d22fe.firebaseio.com/'
+url = ''
 # Unique token used for authentication
-apikey = 'AIzaSyCwGVwAcf2XLeRtMd1sbgt3NlNxPVmIc0E'
+apikey = ''
 
 config = {
     "apiKey": apikey,
